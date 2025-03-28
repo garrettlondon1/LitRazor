@@ -6,6 +6,8 @@
     var serializedProps = JsonSerializer.Serialize(props);
 }
 
+<h1>Pass Parameters to Lit Component</h1>
+
 <LitComponent ScriptName="About/MyAbout">
     <my-about props='@serializedProps'></my-about>
 </LitComponent>

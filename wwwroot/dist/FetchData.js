@@ -641,13 +641,11 @@
       this.props.error = false;
       try {
         await new Promise((resolve) => setTimeout(resolve, 1500));
-        this.props.forecasts = [
-          { date: "2023-10-01", temperatureC: 20, summary: "Mild" },
-          { date: "2023-10-02", temperatureC: 24, summary: "Warm" },
-          { date: "2023-10-03", temperatureC: 18, summary: "Cool" },
-          { date: "2023-10-04", temperatureC: 16, summary: "Chilly" },
-          { date: "2023-10-05", temperatureC: 27, summary: "Hot" }
-        ];
+        const response = await fetch("/api/weatherforecast");
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        this.props.forecasts = await response.json();
       } catch (e5) {
         this.props.error = true;
         console.error("Error fetching weather data:", e5);
