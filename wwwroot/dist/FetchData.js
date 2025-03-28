@@ -588,13 +588,12 @@
   var FetchData = class extends r4 {
     constructor() {
       super(...arguments);
-      this.forecasts = [];
-      this.loading = true;
-      this.error = false;
+      this.props = { forecasts: [], loading: true, error: false };
     }
     async connectedCallback() {
       super.connectedCallback();
       await this.fetchData();
+      this.requestUpdate();
     }
     render() {
       return x`
@@ -608,7 +607,7 @@
                                     <p class="text-gray-600">This component demonstrates fetching data from an API.</p>
                                     
                                     <div class="mt-6">
-                                        ${this.loading ? x`<p class="text-center text-gray-500">Loading...</p>` : this.error ? x`<p class="text-center text-red-500">Error loading data. Please try again later.</p>` : x`
+                                        ${this.props.loading ? x`<p class="text-center text-gray-500">Loading...</p>` : this.props.error ? x`<p class="text-center text-red-500">Error loading data. Please try again later.</p>` : x`
                                                     <table class="min-w-full divide-y divide-gray-200">
                                                         <thead class="bg-gray-50">
                                                             <tr>
@@ -618,7 +617,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody class="bg-white divide-y divide-gray-200">
-                                                            ${this.forecasts.map((forecast) => x`
+                                                            ${this.props.forecasts.map((forecast) => x`
                                                                 <tr>
                                                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${forecast.date}</td>
                                                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${forecast.temperatureC}</td>
@@ -638,11 +637,11 @@
         `;
     }
     async fetchData() {
-      this.loading = true;
-      this.error = false;
+      this.props.loading = true;
+      this.props.error = false;
       try {
         await new Promise((resolve) => setTimeout(resolve, 1500));
-        this.forecasts = [
+        this.props.forecasts = [
           { date: "2023-10-01", temperatureC: 20, summary: "Mild" },
           { date: "2023-10-02", temperatureC: 24, summary: "Warm" },
           { date: "2023-10-03", temperatureC: 18, summary: "Cool" },
@@ -650,22 +649,16 @@
           { date: "2023-10-05", temperatureC: 27, summary: "Hot" }
         ];
       } catch (e5) {
-        this.error = true;
+        this.props.error = true;
         console.error("Error fetching weather data:", e5);
       } finally {
-        this.loading = false;
+        this.props.loading = false;
       }
     }
   };
   __decorateClass([
-    n4({ type: Array })
-  ], FetchData.prototype, "forecasts", 2);
-  __decorateClass([
-    n4({ type: Boolean })
-  ], FetchData.prototype, "loading", 2);
-  __decorateClass([
-    n4({ type: Boolean })
-  ], FetchData.prototype, "error", 2);
+    n4({ type: Object })
+  ], FetchData.prototype, "props", 2);
   FetchData = __decorateClass([
     t3("my-fetchdata")
   ], FetchData);

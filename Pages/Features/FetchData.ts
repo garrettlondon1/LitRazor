@@ -1,17 +1,24 @@
-import {LitElement, html} from 'lit';
-import {customElement, property} from 'lit/decorators.js';
+import { LitElement, html } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+
+type forecast = { date: string; temperatureC: number; summary: string };
+
+type props = {
+    forecasts: forecast[];
+    loading: boolean;
+    error: boolean;
+}
 
 @customElement('my-fetchdata')
 export class FetchData extends LitElement {
-    @property({type: Array}) forecasts: { date: string; temperatureC: number; summary: string }[] = [];
-    @property({type: Boolean}) loading = true;
-    @property({type: Boolean}) error = false;
-
+    @property({type: Object}) props: props = { forecasts: [], loading: true, error: false };
+    
     async connectedCallback() {
         super.connectedCallback();
         await this.fetchData();
+        this.requestUpdate();
     }
-
+    
     protected render() {
         return html`
             <div class="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
@@ -24,9 +31,9 @@ export class FetchData extends LitElement {
                                     <p class="text-gray-600">This component demonstrates fetching data from an API.</p>
                                     
                                     <div class="mt-6">
-                                        ${this.loading ? 
+                                        ${this.props.loading ? 
                                             html`<p class="text-center text-gray-500">Loading...</p>` : 
-                                            this.error ? 
+                                            this.props.error ? 
                                                 html`<p class="text-center text-red-500">Error loading data. Please try again later.</p>` :
                                                 html`
                                                     <table class="min-w-full divide-y divide-gray-200">
@@ -38,7 +45,7 @@ export class FetchData extends LitElement {
                                                             </tr>
                                                         </thead>
                                                         <tbody class="bg-white divide-y divide-gray-200">
-                                                            ${this.forecasts.map(forecast => html`
+                                                            ${this.props.forecasts.map(forecast => html`
                                                                 <tr>
                                                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${forecast.date}</td>
                                                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${forecast.temperatureC}</td>
@@ -60,15 +67,15 @@ export class FetchData extends LitElement {
     }
 
     private async fetchData() {
-        this.loading = true;
-        this.error = false;
+        this.props.loading = true;
+        this.props.error = false;
         
         try {
             // Simulate API call with a delay
             await new Promise(resolve => setTimeout(resolve, 1500));
             
             // Mock data that would normally come from an API
-            this.forecasts = [
+            this.props.forecasts = [
                 { date: '2023-10-01', temperatureC: 20, summary: 'Mild' },
                 { date: '2023-10-02', temperatureC: 24, summary: 'Warm' },
                 { date: '2023-10-03', temperatureC: 18, summary: 'Cool' },
@@ -76,10 +83,10 @@ export class FetchData extends LitElement {
                 { date: '2023-10-05', temperatureC: 27, summary: 'Hot' }
             ];
         } catch (e) {
-            this.error = true;
+            this.props.error = true;
             console.error('Error fetching weather data:', e);
         } finally {
-            this.loading = false;
+            this.props.loading = false;
         }
     }
 }

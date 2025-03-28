@@ -1,0 +1,17 @@
+@page "/about"
+@using System.Text.Json
+
+@{
+    var props = new AboutProps { Permission = "admin" };
+    var serializedProps = JsonSerializer.Serialize(props);
+}
+
+<LitComponent ScriptName="About/MyAbout">
+    <my-about props='@serializedProps'></my-about>
+</LitComponent>
+
+@code {
+    public class AboutProps {
+        public string Permission { get; set; } = "admin";
+    }
+}

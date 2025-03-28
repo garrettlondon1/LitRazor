@@ -8,8 +8,9 @@
     "build:ts": "npx esbuild Pages/**/*.ts --bundle --outdir=wwwroot/dist --sourcemap",
     "build:css": "postcss styles/app.css -o wwwroot/css/app.min.css",
     "watch": "concurrently -n TS,CSS -c green,cyan \"npm:watch:ts\" \"npm:watch:css\"",
-    "watch:ts": "esbuild Pages/**/*.ts --bundle --outdir=wwwroot/dist --sourcemap --watch",
-    "watch:css": "postcss styles/app.css -o wwwroot/css/app.min.css --watch"
+    "watch:ts": "esbuild \"Pages/**/*.ts\" --bundle --outdir=wwwroot/dist --sourcemap --watch",
+    "watch:css": "postcss styles/app.css -o wwwroot/css/app.min.css --watch",
+    "new-component": "node Scripts/newFile.js"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.21",

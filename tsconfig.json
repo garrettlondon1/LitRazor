@@ -21,11 +21,7 @@
       "baseUrl": ".",
       "paths": {
         "lit": ["./node_modules/@lit"],
-        "lit/*": ["./node_modules/@lit/*"]
+        "lit/*": ["./node_modules/@lit/*"],
       }
-    },
-    "include": [
-      "Pages/**/*.ts"
-    ],
-    "exclude": []
+    }
   }
