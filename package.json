@@ -5,23 +5,28 @@
   "description": "LitRazor with Tailwind CSS",
   "scripts": {
     "build": "npm run build:ts && npm run build:css",
-    "build:ts": "npx esbuild Pages/**/*.ts --bundle --outdir=wwwroot/dist --sourcemap",
+    "build:ts": "npx esbuild Pages/**/*.ts lib/**/*.ts --bundle --outdir=wwwroot/dist --sourcemap",
     "build:css": "postcss styles/app.css -o wwwroot/css/app.min.css",
     "watch": "concurrently -n TS,CSS -c green,cyan \"npm:watch:ts\" \"npm:watch:css\"",
-    "watch:ts": "esbuild \"Pages/**/*.ts\" --bundle --outdir=wwwroot/dist --sourcemap --watch",
+    "watch:ts": "esbuild \"Pages/**/*.ts\" \"lib/**/*.ts\" --bundle --outdir=wwwroot/js --sourcemap --watch",
     "watch:css": "postcss styles/app.css -o wwwroot/css/app.min.css --watch",
-    "new-component": "node Scripts/newFile.js"
+    "new-component": "node Scripts/newFile.js",
+    "generate-api": "NODE_TLS_REJECT_UNAUTHORIZED=0 npx @hey-api/openapi-ts",
+    "generate-api:watch": "nodemon --watch https://localhost:7060/swagger/v1/swagger.json --exec 'npm run generate-api'"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.21",
     "concurrently": "^9.1.2",
     "esbuild": "^0.25.1",
     "lit": "^3.2.1",
+    "nodemon": "^3.1.0",
     "postcss": "^8.5.3",
     "postcss-cli": "^11.0.1",
     "tailwindcss": "^4.0.17"
   },
   "dependencies": {
+    "@hey-api/client-fetch": "^0.8.4",
+    "@hey-api/openapi-ts": "^0.64.15",
     "@tailwindcss/postcss": "^4.0.17",
     "lit": "^3.2.1",
     "postcss-cli": "^11.0.1",

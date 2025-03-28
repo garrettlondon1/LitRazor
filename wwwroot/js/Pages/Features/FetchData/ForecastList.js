@@ -584,7 +584,7 @@
     })(t4, e5, o5);
   }
 
-  // Pages/Features/FetchData.ts
+  // Pages/Features/FetchData/ForecastList.ts
   var ForecastList = class extends r4 {
     constructor() {
       super(...arguments);
@@ -619,59 +619,6 @@
   ForecastList = __decorateClass([
     t3("forecast-list")
   ], ForecastList);
-  var FetchData = class extends r4 {
-    constructor() {
-      super(...arguments);
-      this.props = { forecasts: [], loading: true, error: false };
-    }
-    async connectedCallback() {
-      super.connectedCallback();
-      await this.fetchData();
-      this.requestUpdate();
-    }
-    render() {
-      return x`
-            <div class="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
-                <div class="relative py-3 sm:max-w-xl sm:mx-auto">
-                    <div class="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
-                        <div class="max-w-md mx-auto">
-                            <div class="divide-y divide-gray-200">
-                                <div class="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
-                                    <h1 class="text-3xl font-bold text-gray-900 mb-4">Weather Forecast</h1>
-                                    <p class="text-gray-600">This component demonstrates fetching data from an API.</p>
-                                    
-                                    <div class="mt-6">
-                                        ${this.props.loading ? x`<p class="text-center text-gray-500">Loading...</p>` : this.props.error ? x`<p class="text-center text-red-500">Error loading data. Please try again later.</p>` : x`<forecast-list .forecasts=${this.props.forecasts}></forecast-list>`}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-    async fetchData() {
-      this.props.loading = true;
-      this.props.error = false;
-      try {
-        await new Promise((resolve) => setTimeout(resolve, 300));
-        const response = await fetch("/api/weatherforecast");
-        this.props.forecasts = await response.json();
-      } catch (e5) {
-        this.props.error = true;
-        console.error("Error fetching weather data:", e5);
-      } finally {
-        this.props.loading = false;
-      }
-    }
-  };
-  __decorateClass([
-    n4({ type: Object })
-  ], FetchData.prototype, "props", 2);
-  FetchData = __decorateClass([
-    t3("my-fetchdata")
-  ], FetchData);
 })();
 /*! Bundled license information:
 
@@ -780,4 +727,4 @@ lit-html/is-server.js:
    * SPDX-License-Identifier: BSD-3-Clause
    *)
 */
-//# sourceMappingURL=FetchData.js.map
+//# sourceMappingURL=ForecastList.js.map

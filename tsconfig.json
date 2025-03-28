@@ -22,6 +22,9 @@
       "paths": {
         "lit": ["./node_modules/@lit"],
         "lit/*": ["./node_modules/@lit/*"],
+        "api/types": ["./lib/api/types.gen.js"],
+        "api/sdk": ["./lib/api/sdk.gen.js"]
       }
-    }
+    },
+    "include": ["Pages/**/*.ts", "lib/**/*.ts"]
   }
