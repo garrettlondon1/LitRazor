@@ -1,0 +1,7 @@
+@code {
+    [Parameter, EditorRequired] public required string ScriptName { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+}
+
+<script type="module" src="dist/@(ScriptName).js"></script>
+@ChildContent

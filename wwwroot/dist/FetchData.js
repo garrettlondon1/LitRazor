@@ -584,12 +584,17 @@
     })(t4, e5, o5);
   }
 
-  // Pages/Features/Counter.ts
-  var Counter = class extends r4 {
+  // Pages/Features/FetchData.ts
+  var FetchData = class extends r4 {
     constructor() {
       super(...arguments);
-      this.count = 0;
-      this.isBusy = false;
+      this.forecasts = [];
+      this.loading = true;
+      this.error = false;
+    }
+    async connectedCallback() {
+      super.connectedCallback();
+      await this.fetchData();
     }
     render() {
       return x`
@@ -599,23 +604,30 @@
                         <div class="max-w-md mx-auto">
                             <div class="divide-y divide-gray-200">
                                 <div class="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
-                                    <h1 class="text-3xl font-bold text-gray-900 mb-4">Welcome to LitRazor!</h1>
-                                    <p class="text-gray-600">This is a Razor component page styled with Tailwind
-                                        CSS.</p>
+                                    <h1 class="text-3xl font-bold text-gray-900 mb-4">Weather Forecast</h1>
+                                    <p class="text-gray-600">This component demonstrates fetching data from an API.</p>
                                     
-                                    <div class="flex flex-col items-center justify-center h-screen">
-                                        <p>
-                                            <button
-                                                    @click="${this._increment}"
-                                                    ?disabled="${this.isBusy}"
-                                                    class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-xs font-medium text-emerald-600 bg-white hover:bg-gray-50 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-emerald-500 space-x-2 disabled:opacity-25 whitespace-nowrap">
-                                                <span>Click Me!</span>
-                                            </button>
-                                        </p>
-                                        
-                                        ${this.isBusy ? x`Loading...` : ""}
-                                        
-                                        <p>Click count: ${this.count}</p>
+                                    <div class="mt-6">
+                                        ${this.loading ? x`<p class="text-center text-gray-500">Loading...</p>` : this.error ? x`<p class="text-center text-red-500">Error loading data. Please try again later.</p>` : x`
+                                                    <table class="min-w-full divide-y divide-gray-200">
+                                                        <thead class="bg-gray-50">
+                                                            <tr>
+                                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Temp. (C)</th>
+                                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Summary</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody class="bg-white divide-y divide-gray-200">
+                                                            ${this.forecasts.map((forecast) => x`
+                                                                <tr>
+                                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${forecast.date}</td>
+                                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${forecast.temperatureC}</td>
+                                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${forecast.summary}</td>
+                                                                </tr>
+                                                            `)}
+                                                        </tbody>
+                                                    </table>
+                                                `}
                                     </div>
                                 </div>
                             </div>
@@ -625,23 +637,38 @@
             </div>
         `;
     }
-    async _increment(e5) {
-      this.isBusy = true;
-      await new Promise((resolve) => setTimeout(resolve, 1e3));
-      e5.preventDefault();
-      this.count++;
-      this.isBusy = false;
+    async fetchData() {
+      this.loading = true;
+      this.error = false;
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+        this.forecasts = [
+          { date: "2023-10-01", temperatureC: 20, summary: "Mild" },
+          { date: "2023-10-02", temperatureC: 24, summary: "Warm" },
+          { date: "2023-10-03", temperatureC: 18, summary: "Cool" },
+          { date: "2023-10-04", temperatureC: 16, summary: "Chilly" },
+          { date: "2023-10-05", temperatureC: 27, summary: "Hot" }
+        ];
+      } catch (e5) {
+        this.error = true;
+        console.error("Error fetching weather data:", e5);
+      } finally {
+        this.loading = false;
+      }
     }
   };
   __decorateClass([
-    n4({ type: Number })
-  ], Counter.prototype, "count", 2);
+    n4({ type: Array })
+  ], FetchData.prototype, "forecasts", 2);
   __decorateClass([
     n4({ type: Boolean })
-  ], Counter.prototype, "isBusy", 2);
-  Counter = __decorateClass([
-    t3("my-counter")
-  ], Counter);
+  ], FetchData.prototype, "loading", 2);
+  __decorateClass([
+    n4({ type: Boolean })
+  ], FetchData.prototype, "error", 2);
+  FetchData = __decorateClass([
+    t3("my-fetchdata")
+  ], FetchData);
 })();
 /*! Bundled license information:
 
@@ -750,4 +777,4 @@ lit-html/is-server.js:
    * SPDX-License-Identifier: BSD-3-Clause
    *)
 */
-//# sourceMappingURL=Counter.js.map
+//# sourceMappingURL=FetchData.js.map

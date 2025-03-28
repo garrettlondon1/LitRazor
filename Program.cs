@@ -1,4 +1,4 @@
-using LitRazor;
+using LitRazor.Pages.Layout;
 
 var builder = WebApplication.CreateBuilder(args);
 
