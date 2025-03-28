@@ -9,6 +9,34 @@ type props = {
     error: boolean;
 }
 
+@customElement('forecast-list')
+export class ForecastList extends LitElement {
+    @property({type: Array}) forecasts: forecast[] = [];
+
+    protected render() {
+        return html`
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Temp. (C)</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Summary</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    ${this.forecasts.map(forecast => html`
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${forecast.date}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${forecast.temperatureC}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${forecast.summary}</td>
+                        </tr>
+                    `)}
+                </tbody>
+            </table>
+        `;
+    }
+}
+
 @customElement('my-fetchdata')
 export class FetchData extends LitElement {
     @property({type: Object}) props: props = { forecasts: [], loading: true, error: false };
@@ -31,30 +59,13 @@ export class FetchData extends LitElement {
                                     <p class="text-gray-600">This component demonstrates fetching data from an API.</p>
                                     
                                     <div class="mt-6">
-                                        ${this.props.loading ? 
-                                            html`<p class="text-center text-gray-500">Loading...</p>` : 
+                                        ${this.props.loading 
+                                        ? 
+                                            html`<p class="text-center text-gray-500">Loading...</p>` 
+                                        : 
                                             this.props.error ? 
                                                 html`<p class="text-center text-red-500">Error loading data. Please try again later.</p>` :
-                                                html`
-                                                    <table class="min-w-full divide-y divide-gray-200">
-                                                        <thead class="bg-gray-50">
-                                                            <tr>
-                                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Temp. (C)</th>
-                                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Summary</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody class="bg-white divide-y divide-gray-200">
-                                                            ${this.props.forecasts.map(forecast => html`
-                                                                <tr>
-                                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${forecast.date}</td>
-                                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${forecast.temperatureC}</td>
-                                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${forecast.summary}</td>
-                                                                </tr>
-                                                            `)}
-                                                        </tbody>
-                                                    </table>
-                                                `
+                                                html`<forecast-list .forecasts=${this.props.forecasts}></forecast-list>`
                                         }
                                     </div>
                                 </div>
@@ -70,13 +81,8 @@ export class FetchData extends LitElement {
         this.props.error = false;
         
         try {
-            await new Promise(resolve => setTimeout(resolve, 1500));
+            await new Promise(resolve => setTimeout(resolve, 300));
             const response = await fetch('/api/weatherforecast');
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            
             this.props.forecasts = await response.json();
         } catch (e) {
             this.props.error = true;

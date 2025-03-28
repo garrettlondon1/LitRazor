@@ -585,6 +585,40 @@
   }
 
   // Pages/Features/FetchData.ts
+  var ForecastList = class extends r4 {
+    constructor() {
+      super(...arguments);
+      this.forecasts = [];
+    }
+    render() {
+      return x`
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Temp. (C)</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Summary</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    ${this.forecasts.map((forecast) => x`
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${forecast.date}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${forecast.temperatureC}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${forecast.summary}</td>
+                        </tr>
+                    `)}
+                </tbody>
+            </table>
+        `;
+    }
+  };
+  __decorateClass([
+    n4({ type: Array })
+  ], ForecastList.prototype, "forecasts", 2);
+  ForecastList = __decorateClass([
+    t3("forecast-list")
+  ], ForecastList);
   var FetchData = class extends r4 {
     constructor() {
       super(...arguments);
@@ -607,26 +641,7 @@
                                     <p class="text-gray-600">This component demonstrates fetching data from an API.</p>
                                     
                                     <div class="mt-6">
-                                        ${this.props.loading ? x`<p class="text-center text-gray-500">Loading...</p>` : this.props.error ? x`<p class="text-center text-red-500">Error loading data. Please try again later.</p>` : x`
-                                                    <table class="min-w-full divide-y divide-gray-200">
-                                                        <thead class="bg-gray-50">
-                                                            <tr>
-                                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Temp. (C)</th>
-                                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Summary</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody class="bg-white divide-y divide-gray-200">
-                                                            ${this.props.forecasts.map((forecast) => x`
-                                                                <tr>
-                                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${forecast.date}</td>
-                                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${forecast.temperatureC}</td>
-                                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${forecast.summary}</td>
-                                                                </tr>
-                                                            `)}
-                                                        </tbody>
-                                                    </table>
-                                                `}
+                                        ${this.props.loading ? x`<p class="text-center text-gray-500">Loading...</p>` : this.props.error ? x`<p class="text-center text-red-500">Error loading data. Please try again later.</p>` : x`<forecast-list .forecasts=${this.props.forecasts}></forecast-list>`}
                                     </div>
                                 </div>
                             </div>
@@ -640,11 +655,8 @@
       this.props.loading = true;
       this.props.error = false;
       try {
-        await new Promise((resolve) => setTimeout(resolve, 1500));
+        await new Promise((resolve) => setTimeout(resolve, 300));
         const response = await fetch("/api/weatherforecast");
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
         this.props.forecasts = await response.json();
       } catch (e5) {
         this.props.error = true;

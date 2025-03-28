@@ -591,6 +591,9 @@
       this.count = 0;
       this.isBusy = false;
     }
+    async _increment(_e) {
+      this.count++;
+    }
     render() {
       return x`
             <div class="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
@@ -607,7 +610,6 @@
                                         <p>
                                             <button
                                                     @click="${this._increment}"
-                                                    ?disabled="${this.isBusy}"
                                                     class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-xs font-medium text-emerald-600 bg-white hover:bg-gray-50 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-emerald-500 space-x-2 disabled:opacity-25 whitespace-nowrap">
                                                 <span>Click Me!</span>
                                             </button>
@@ -624,13 +626,6 @@
                 </div>
             </div>
         `;
-    }
-    async _increment(e5) {
-      this.isBusy = true;
-      await new Promise((resolve) => setTimeout(resolve, 1e3));
-      e5.preventDefault();
-      this.count++;
-      this.isBusy = false;
     }
   };
   __decorateClass([

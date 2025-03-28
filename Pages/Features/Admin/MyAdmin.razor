@@ -1,4 +1,4 @@
-@page "/about"
+@page "/admin"
 @using System.Text.Json
 
 @{
@@ -8,8 +8,8 @@
 
 <h1>Pass Parameters to Lit Component</h1>
 
-<LitComponent ScriptName="About/MyAbout">
-    <my-about props='@serializedProps'></my-about>
+<LitComponent ScriptName="Admin/MyAdmin">
+    <my-admin props='@serializedProps'></my-admin>
 </LitComponent>
 
 @code {

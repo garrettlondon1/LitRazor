@@ -6,6 +6,10 @@ export class Counter extends LitElement {
     @property({type: Number}) count = 0;
     @property({type: Boolean}) isBusy = false;
 
+    private async _increment(_e: Event) {
+        this.count++;
+    }
+
     protected render() {
         return html`
             <div class="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
@@ -22,7 +26,6 @@ export class Counter extends LitElement {
                                         <p>
                                             <button
                                                     @click="${this._increment}"
-                                                    ?disabled="${this.isBusy}"
                                                     class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-xs font-medium text-emerald-600 bg-white hover:bg-gray-50 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-emerald-500 space-x-2 disabled:opacity-25 whitespace-nowrap">
                                                 <span>Click Me!</span>
                                             </button>
@@ -39,13 +42,5 @@ export class Counter extends LitElement {
                 </div>
             </div>
         `;
-    }
-
-    private async _increment(e: Event) {
-        this.isBusy = true;
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        e.preventDefault();
-        this.count++;
-        this.isBusy = false;
     }
 }

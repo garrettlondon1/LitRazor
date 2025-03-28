@@ -584,8 +584,8 @@
     })(t4, e5, o5);
   }
 
-  // Pages/Features/About/MyAbout.ts
-  var MyAbout = class extends r4 {
+  // Pages/Features/Admin/MyAdmin.ts
+  var MyAdmin = class extends r4 {
     constructor() {
       super(...arguments);
       this.props = { Permission: "" };
@@ -593,7 +593,7 @@
     render() {
       return x`
       <div>
-        <h1>About</h1>
+        <h1>Admin</h1>
         <p>Permission: ${this.props?.Permission}</p>
       </div>
     `;
@@ -601,10 +601,10 @@
   };
   __decorateClass([
     n4({ type: Object })
-  ], MyAbout.prototype, "props", 2);
-  MyAbout = __decorateClass([
-    t3("my-about")
-  ], MyAbout);
+  ], MyAdmin.prototype, "props", 2);
+  MyAdmin = __decorateClass([
+    t3("my-admin")
+  ], MyAdmin);
 })();
 /*! Bundled license information:
 
@@ -713,4 +713,4 @@ lit-html/is-server.js:
    * SPDX-License-Identifier: BSD-3-Clause
    *)
 */
-//# sourceMappingURL=MyAbout.js.map
+//# sourceMappingURL=MyAdmin.js.map
