@@ -835,13 +835,15 @@
     constructor() {
       super(...arguments);
       this.forecasts = [];
-      this.loading = true;
+      this.loading = false;
       this.error = false;
     }
-    async connectedCallback() {
+    connectedCallback() {
       super.connectedCallback();
+      this.fetchData();
+    }
+    async refresh() {
       await this.fetchData();
-      this.requestUpdate();
     }
     render() {
       return x`
@@ -853,6 +855,18 @@
                                 <div class="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
                                     <h1 class="text-3xl font-bold text-gray-900 mb-4">Weather Forecast</h1>
                                     <p class="text-gray-600">This component demonstrates fetching data from an API.</p>
+                                    
+                                    <div class="flex justify-end mb-4">
+                                        <button
+                                            @click="${this.refresh}"
+                                            class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm font-medium text-blue-600 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+                                            ?disabled="${this.loading}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                            </svg>
+                                            Refresh
+                                        </button>
+                                    </div>
                                     
                                     <div class="mt-6">
                                         ${this.loading ? x`<p class="text-center text-gray-500">Loading...</p>` : this.error ? x`<p class="text-center text-red-500">Error loading data. Please try again later.</p>` : x`<forecast-list .forecasts=${this.forecasts}></forecast-list>`}
